@@ -31,7 +31,6 @@ export function useMultiSelect({
   const handleSelectOption = (option: SelectOption) => {
     const arr = [...selectValue, ...value, option.value];
     const values: string[] = uniq(arr);
-    console.log({ values, value, arr, selectValue, v: option.value });
     setInputValue('');
     setSelectValue(values);
     onChange?.({ target: { value: values, type: 'text', name: name! } });
