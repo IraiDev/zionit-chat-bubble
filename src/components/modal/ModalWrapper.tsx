@@ -1,17 +1,17 @@
-import React from 'react';
-import { useTransition, animated } from '@react-spring/web';
-import { ModalProps } from './Modal';
+import React from "react"
+import { useTransition, animated } from "@react-spring/web"
+import { ModalProps } from "./Modal"
 
-interface Props extends Pick<ModalProps, 'children' | 'isOpen'> {
-  maxWidth: string;
+interface Props extends Pick<ModalProps, "children" | "isOpen"> {
+  maxWidth: string
 }
 
-export function ModalWrapper({ children, maxWidth = '', isOpen }: Props) {
+export function ModalWrapper({ children, maxWidth = "", isOpen }: Props) {
   const transition = useTransition(isOpen, {
-    from: { opacity: 0, transform: 'translateY(-40px)' },
-    enter: { opacity: 1, transform: 'translateY(0px)' },
-    leave: { opacity: 0, transform: 'translateY(-40px)' },
-  });
+    from: { opacity: 0, transform: "translateY(-40px)" },
+    enter: { opacity: 1, transform: "translateY(0px)" },
+    leave: { opacity: 0, transform: "translateY(-40px)" },
+  })
 
   return (
     <div className={`p-3 ${maxWidth}`}>
@@ -31,5 +31,5 @@ export function ModalWrapper({ children, maxWidth = '', isOpen }: Props) {
           )
       )}
     </div>
-  );
+  )
 }

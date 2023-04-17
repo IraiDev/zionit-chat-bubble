@@ -1,19 +1,19 @@
-import React, { useId } from 'react';
-import { FieldHelper } from './FieldHelper';
-import { FieldWrapper } from './FieldWrapper';
-import { TextareaProps } from '../../utils/types';
+import React, { useId } from "react"
+import { FieldHelper } from "./FieldHelper"
+import { FieldWrapper } from "./FieldWrapper"
+import { TextareaProps } from "../../utils/types"
 
 export function Textarea(props: TextareaProps) {
   const {
     error = false,
     disabled = false,
-    helperText = '',
+    helperText = "",
     label,
     placeholder = label,
     rows = 4,
     ...rest
-  } = props;
-  const textareaId = useId();
+  } = props
+  const textareaId = useId()
 
   return (
     <div className="space-y-1">
@@ -34,7 +34,7 @@ export function Textarea(props: TextareaProps) {
           peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs w-full block 
           text-neutral-500 dark:text-neutral-400
           peer-focus:text-neutral-600 dark:peer-focus:text-neutral-300
-          ${disabled ? 'bg-neutral-100 dark:bg-neutral-700' : ''}
+          ${disabled ? "bg-neutral-100 dark:bg-neutral-700" : ""}
         `}
         >
           {label}:
@@ -47,5 +47,5 @@ export function Textarea(props: TextareaProps) {
         currentLength={props.value?.length}
       />
     </div>
-  );
+  )
 }

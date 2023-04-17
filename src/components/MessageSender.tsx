@@ -4,62 +4,80 @@ import React, {
   KeyboardEvent,
   useRef,
   useState,
-} from 'react';
-import { BsSendFill } from 'react-icons/bs';
-import { SERVER_CHANNELS } from '../utils/constants';
-import { useChatContext } from '../store/ChatStore';
+  useEffect,
+} from "react"
+import { BsSendFill } from "react-icons/bs"
+import { SERVER_CHANNELS } from "../utils/constants"
+import { useChatContext } from "../store/ChatStore"
+import { SocketError } from "../utils/types"
 
 interface Props {
-  chatUid: string;
+  chatUid: string
 }
 
 export const MessageSender = ({ chatUid }: Props) => {
-  const { connection, loggedUser } = useChatContext();
-  const [message, setMessage] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { connection, loggedUser, fieldSenderMessageDuration, isConnected } =
+    useChatContext()
+  const [message, setMessage] = useState(localStorage.getItem(chatUid) ?? "")
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const sendMessage = () => {
-    if (
-      textareaRef.current === null ||
-      connection === null ||
-      loggedUser === null
+    if (textareaRef.current === null || connection === null || loggedUser === null) return
+    if (message === "") return
+
+    connection.emit(
+      SERVER_CHANNELS.messages,
+      {
+        message,
+        token: loggedUser.token,
+        chatUid,
+      },
+      ({ ok, message }: SocketError) => {
+        console.log({ ok, message })
+      }
     )
-      return;
-    if (message === '') return;
 
-    connection.emit(SERVER_CHANNELS.messages, {
-      message,
-      token: loggedUser.token,
-      chatUid,
-    });
-
-    setMessage('');
-    textareaRef.current.style.height = 'auto';
-  };
+    setMessage("")
+    localStorage.removeItem(chatUid)
+    textareaRef.current.style.height = "auto"
+  }
 
   const handleChangeValue = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    const scrollHeight = e.target.scrollHeight;
-    e.target.style.height = `${scrollHeight}px`;
-    setMessage(value);
+    const value = e.target.value
+    const scrollHeight = e.target.scrollHeight
+    e.target.style.height = `${scrollHeight}px`
+    setMessage(value)
+    localStorage.setItem(chatUid, value)
 
-    if (value === '') {
-      e.target.style.height = 'auto';
+    if (value === "") {
+      e.target.style.height = "auto"
     }
-  };
+  }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    sendMessage();
-  };
+    e.preventDefault()
+    sendMessage()
+  }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
-    sendMessage();
-  };
+    if (e.key !== "Enter") return
+    e.preventDefault()
+    sendMessage()
+  }
 
-  if (chatUid === '') return <footer className="h-[70px]" />;
+  useEffect(() => {
+    if (message === "" || localStorage.getItem(chatUid) === null) return
+    const timer = setTimeout(() => {
+      setMessage("")
+      localStorage.removeItem(chatUid)
+    }, fieldSenderMessageDuration)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [message, fieldSenderMessageDuration])
+
+  if (chatUid === "") return <footer className="h-[70px]" />
 
   return (
     <footer className="p-2">
@@ -69,7 +87,7 @@ export const MessageSender = ({ chatUid }: Props) => {
         border border-neutral-300 dark:border-neutral-600"
       >
         <textarea
-          disabled={chatUid === ''}
+          disabled={chatUid === "" || !isConnected}
           name="message"
           autoComplete="off"
           rows={1}
@@ -82,7 +100,7 @@ export const MessageSender = ({ chatUid }: Props) => {
           transition duration-200 scroll-app h-auto resize-none disabled:hover:ring-transparent"
         ></textarea>
         <button
-          disabled={message === ''}
+          disabled={message === "" || !isConnected}
           type="submit"
           className="min-w-[36px] h-9 grid place-content-center bg-emerald-600 
           hover:bg-emerald-500 text-white transition duration-200 outline-none
@@ -93,5 +111,5 @@ export const MessageSender = ({ chatUid }: Props) => {
         </button>
       </form>
     </footer>
-  );
-};
+  )
+}

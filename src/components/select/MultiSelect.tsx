@@ -1,28 +1,28 @@
-import React, { useMemo, useCallback, useId } from 'react';
-import { TbX } from 'react-icons/tb';
-import { useMultiSelect } from '../../hooks';
-import { AvatarSelect, SelectDropdown, SelectWrapper, InputSelect } from './';
+import React, { useMemo, useCallback, useId } from "react"
+import { TbX } from "react-icons/tb"
+import { useMultiSelect } from "../../hooks"
+import { AvatarSelect, SelectDropdown, SelectWrapper, InputSelect } from "./"
 import {
-  SelectOption,
-  MultiSelectProps,
-  LabelDisplay,
-} from '../../utils/types';
+  type SelectOption,
+  type MultiSelectProps,
+  type LabelDisplay,
+} from "../../utils/types"
 
 interface Props {
-  value: string[];
-  options: SelectOption[];
-  labelDisplay?: LabelDisplay;
-  onClear: (key: string) => void;
+  value: string[]
+  options: SelectOption[]
+  labelDisplay?: LabelDisplay
+  onClear: (key: string) => void
 }
 
 export function MultiSelect({
   value = [],
   error = false,
   disabled = false,
-  helperText = '',
-  findBy = 'label',
-  labelDisplay = 'label',
-  placeholder = 'Seleccione...',
+  helperText = "",
+  findBy = "label",
+  labelDisplay = "label",
+  placeholder = "Seleccione...",
   ...props
 }: MultiSelectProps) {
   const {
@@ -35,8 +35,8 @@ export function MultiSelect({
     handleOpenOptions,
     handleSelectOption,
     handleClearOption,
-  } = useMultiSelect({ ...props, value, findBy });
-  const inputId = useId();
+  } = useMultiSelect({ ...props, value, findBy })
+  const inputId = useId()
 
   return (
     <div ref={wrapperRef}>
@@ -72,41 +72,36 @@ export function MultiSelect({
         />
       </SelectWrapper>
     </div>
-  );
+  )
 }
 
-function MultiItems({
-  value = [],
-  options,
-  labelDisplay = 'both',
-  onClear,
-}: Props) {
+function MultiItems({ value = [], options, labelDisplay = "both", onClear }: Props) {
   const filteredOptions = useMemo(() => {
-    return options.filter(option => value.includes(option.value));
-  }, [value, options]);
+    return options.filter((option) => value.includes(option.value))
+  }, [value, options])
 
   const LiContent = useCallback(
     (item: SelectOption) => {
-      if (labelDisplay === 'avatar') {
-        return <AvatarSelect alt={item.label} avatar={item.avatar} />;
+      if (labelDisplay === "avatar") {
+        return <AvatarSelect alt={item.label} avatar={item.avatar} />
       }
 
-      if (labelDisplay === 'both') {
+      if (labelDisplay === "both") {
         return (
           <>
             <AvatarSelect alt={item.label} avatar={item.avatar} />
             {item.label}
           </>
-        );
+        )
       }
-      return item.label;
+      return item.label
     },
     [labelDisplay]
-  );
+  )
 
   return (
     <ul className="flex flex-wrap items-center gap-1">
-      {filteredOptions.map(item => (
+      {filteredOptions.map((item) => (
         <li
           key={item.value}
           className={`
@@ -120,7 +115,7 @@ function MultiItems({
             className="h-7 w-7 grid place-content-center hover:bg-neutral-200/60 transition 
             text-neutral-500 dark:text-neutral-400"
             onClick={() => {
-              onClear(item.value);
+              onClear(item.value)
             }}
           >
             <TbX className="text-xl" />
@@ -128,5 +123,5 @@ function MultiItems({
         </li>
       ))}
     </ul>
-  );
+  )
 }

@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
-import React, { forwardRef } from 'react';
-import { ReactRef } from '../../utils/types';
+import React, { forwardRef } from "react"
+import { ReactRef } from "../../utils/types"
 
 interface Props {
-  id: string;
-  placeholder: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  id: string
+  placeholder: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const InputSelect = forwardRef(
@@ -13,7 +13,7 @@ export const InputSelect = forwardRef(
     return (
       <input
         style={{
-          width: 'clamp(60px, 50%, 100px)',
+          width: "clamp(60px, 50%, 100px)",
         }}
         id={id}
         className={`peer h-8 border-none bg-transparent p-0 
@@ -28,6 +28,6 @@ export const InputSelect = forwardRef(
         autoComplete="off"
         onChange={onChange}
       />
-    );
+    )
   }
-);
+)

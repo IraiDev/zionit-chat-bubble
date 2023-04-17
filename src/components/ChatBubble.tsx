@@ -1,24 +1,27 @@
-import React from 'react';
-import { Popover } from './Popover';
-import { AiOutlineMessage } from 'react-icons/ai';
-import { ChatHeader } from './ChatHeader';
-import { MessageWrapper } from './MessageWrapper';
-import { MessageSender } from './MessageSender';
-import { Groups } from './Groups';
-import { useChat } from '../hooks/useChat';
-import { NotReadedMessagesProps } from '../models/chat.model';
+import React from "react"
+import { createPortal } from "react-dom"
+import { Popover } from "./Popover"
+import { AiOutlineMessage } from "react-icons/ai"
+import { ChatHeader } from "./ChatHeader"
+import { MessageWrapper } from "./MessageWrapper"
+import { MessageSender } from "./MessageSender"
+import { Groups } from "./Groups"
+import { useChat } from "../hooks/useChat"
+import { NotReadedMessagesProps } from "../models/chat.model"
+
+const CHAT_BUBBLE_ROOT = document.getElementById("chat-bubble-root")
 
 interface BtnProps {
-  notReadedMessages: NotReadedMessagesProps;
-  onClick: () => void;
+  notReadedMessages: NotReadedMessagesProps
+  onClick: () => void
 }
 
 interface Props {
-  hidden?: boolean;
-  defaultChatName?: string;
+  hidden?: boolean
+  defaultChatName?: string
 }
 
-export const ChatBubble = ({ defaultChatName = 'Chat', hidden }: Props) => {
+export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
   const {
     selectedChat,
     messages,
@@ -27,22 +30,25 @@ export const ChatBubble = ({ defaultChatName = 'Chat', hidden }: Props) => {
     isChatOpen,
     isGroupOpen,
     showChatBubble,
-    handleOpenChat,
+    handleToggleChat,
     handleOpenGroup,
     handleSelectChat,
     setIsGroupOpen,
-  } = useChat({ hidden });
+  } = useChat({ hidden })
 
-  if (!showChatBubble || hidden) return null;
+  if (CHAT_BUBBLE_ROOT === null) {
+    throw new Error(
+      'Es obligatorio crear una entrada para el portal de renderizado del chat con el nombre "chat-bubble-root"'
+    )
+  }
 
-  return (
+  if (!showChatBubble || hidden) return null
+
+  return createPortal(
     <Popover
       isOpen={isChatOpen}
       btnComponent={
-        <ChatButton
-          notReadedMessages={notReadedMessages}
-          onClick={handleOpenChat}
-        />
+        <ChatButton notReadedMessages={notReadedMessages} onClick={handleToggleChat} />
       }
     >
       <ChatHeader
@@ -57,10 +63,11 @@ export const ChatBubble = ({ defaultChatName = 'Chat', hidden }: Props) => {
         onSelectChat={handleSelectChat}
       />
       <MessageWrapper messages={messages} />
-      <MessageSender chatUid={selectedChat?.uid ?? ''} />
-    </Popover>
-  );
-};
+      <MessageSender chatUid={selectedChat?.uid ?? ""} />
+    </Popover>,
+    CHAT_BUBBLE_ROOT
+  )
+}
 
 const ChatButton = ({ onClick, notReadedMessages }: BtnProps) => {
   return (
@@ -79,5 +86,5 @@ const ChatButton = ({ onClick, notReadedMessages }: BtnProps) => {
         </span>
       )}
     </button>
-  );
-};
+  )
+}

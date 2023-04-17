@@ -1,32 +1,26 @@
-import React from 'react';
-import { TbX } from 'react-icons/tb';
-import { ModalProps } from './Modal';
+import React from "react"
+import { TbX } from "react-icons/tb"
+import { ModalProps } from "./Modal"
 
-type Props = Pick<ModalProps, 'hideCloseBtn' | 'onClose' | 'title'>;
+type Props = Pick<ModalProps, "hideCloseBtn" | "onClose" | "title">
 
 export function ModalHeader({ onClose, hideCloseBtn = false, title }: Props) {
-  if (title === undefined) return null;
+  if (title === undefined) return null
   return (
     <header className="p-3 w-full">
       <Closer
         hidden={hideCloseBtn}
         onClick={() => {
-          onClose(false);
+          onClose(false)
         }}
       />
       <h1 className="text-xl font-semibold dark:text-neutral-50">{title}</h1>
     </header>
-  );
+  )
 }
 
-export function Closer({
-  onClick,
-  hidden,
-}: {
-  onClick: () => void;
-  hidden: boolean;
-}) {
-  if (hidden) return null;
+export function Closer({ onClick, hidden }: { onClick: () => void; hidden: boolean }) {
+  if (hidden) return null
   return (
     <button
       onClick={onClick}
@@ -39,5 +33,5 @@ export function Closer({
     >
       <TbX />
     </button>
-  );
+  )
 }

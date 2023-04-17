@@ -1,15 +1,15 @@
-import React, { useId } from 'react';
-import { useSelect } from '../../hooks';
-import { AvatarSelect, SelectWrapper, InputSelect, SelectDropdown } from './';
-import { SelectProps } from '../../utils/types';
+import React, { useId } from "react"
+import { useSelect } from "../../hooks"
+import { AvatarSelect, SelectWrapper, InputSelect, SelectDropdown } from "./"
+import { SelectProps } from "../../utils/types"
 
 export function Select({
   label,
   placeholder,
   error = false,
   disabled = false,
-  helperText = '',
-  findBy = 'label',
+  helperText = "",
+  findBy = "label",
   ...props
 }: SelectProps) {
   const {
@@ -22,8 +22,8 @@ export function Select({
     handleFindInOptions,
     handleOpenOptions,
     handleSelectOption,
-  } = useSelect({ ...props, findBy });
-  const inputId = useId();
+  } = useSelect({ ...props, findBy })
+  const inputId = useId()
 
   return (
     <div ref={wrapperRef}>
@@ -53,5 +53,5 @@ export function Select({
         />
       </SelectWrapper>
     </div>
-  );
+  )
 }

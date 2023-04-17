@@ -8,6 +8,7 @@ export interface IChat {
   is_group: boolean
   lastConnection: string
   notReadedMessages: number
+  users: number[]
 }
 
 export interface IMessage {
@@ -27,4 +28,9 @@ export interface NotReadedMessagesProps {
 export interface NotReadedMessages {
   quantity: number
   uid: string
+}
+
+export interface ChatDisconnected {
+  connected: boolean
+  message: string
 }

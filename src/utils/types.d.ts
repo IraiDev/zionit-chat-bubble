@@ -1,4 +1,9 @@
-import { type VARIANTS, type FILLED_COLORS, type TEXT_SIZES } from "./styles"
+import { VARIANTS, type FILLED_COLORS, type TEXT_SIZES } from "./styles"
+
+interface SocketError {
+  ok: boolean
+  message: string
+}
 
 type ChangeEvent<El> = React.ChangeEvent<El>
 interface OptionsRef {
@@ -113,11 +118,5 @@ interface ButtonProps {
 }
 
 export type BtnProps = ButtonProps
-export type IconBtnProps = Omit<
-  ButtonProps,
-  "endIcon" | "startIcon" | "fullWidth"
->
-export type CustomBtnProps = Pick<
-  ButtonProps,
-  "onClick" | "hidden" | "disabled"
->
+export type IconBtnProps = Omit<ButtonProps, "endIcon" | "startIcon" | "fullWidth">
+export type CustomBtnProps = Pick<ButtonProps, "onClick" | "hidden" | "disabled">

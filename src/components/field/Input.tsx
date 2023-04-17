@@ -1,25 +1,25 @@
-import React, { useId } from 'react';
-import { FieldAdorment } from './FieldAdorment';
-import { FieldHelper } from './FieldHelper';
-import { FieldWrapper } from './FieldWrapper';
-import { InputProps } from '../../utils/types';
+import React, { useId } from "react"
+import { FieldAdorment } from "./FieldAdorment"
+import { FieldHelper } from "./FieldHelper"
+import { FieldWrapper } from "./FieldWrapper"
+import { InputProps } from "../../utils/types"
 
 interface Props extends InputProps {
-  startAdorment?: React.ReactNode;
-  endAdorment?: React.ReactNode;
+  startAdorment?: React.ReactNode
+  endAdorment?: React.ReactNode
 }
 
 export function Input(props: Props) {
   const {
     error = false,
-    helperText = '',
+    helperText = "",
     label,
-    type = 'text',
+    type = "text",
     placeholder = label,
     disabled = false,
     ...rest
-  } = props;
-  const inputId = useId();
+  } = props
+  const inputId = useId()
 
   return (
     <div className="space-y-1">
@@ -41,8 +41,8 @@ export function Input(props: Props) {
           dark:peer-focus:text-neutral-300
           ${
             props.startAdorment !== undefined
-              ? ''
-              : 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm '
+              ? ""
+              : "peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm "
           }
         `}
         >
@@ -57,5 +57,5 @@ export function Input(props: Props) {
         currentLength={props.value?.length}
       />
     </div>
-  );
+  )
 }
