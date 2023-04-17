@@ -1,42 +1,43 @@
-import React, { useState, useEffect, FormEvent } from "react"
-import { HiPencil } from "react-icons/hi"
-import { Modal } from "./modal/Modal"
-import { ModalAction } from "./modal/ModalAction"
-import { useForm } from "../hooks/useForm"
-import { useChatContext } from "../store/ChatStore"
-import { MultiSelect } from "./select"
-import { usersOptionsAdapter } from "../utils/functions"
-import { Input, Textarea } from "./field"
-import { SERVER_CHANNELS } from "../utils/constants"
-import { IChat } from "../models/chat.model"
-import { SocketError } from "../utils/types"
+import React, { useState, useEffect, FormEvent } from 'react';
+import { HiPencil } from 'react-icons/hi';
+import { Modal } from './modal/Modal';
+import { ModalAction } from './modal/ModalAction';
+import { useForm } from '../hooks/useForm';
+import { useChatContext } from '../store/ChatStore';
+import { MultiSelect } from './select';
+import { usersOptionsAdapter } from '../utils/functions';
+import { Input, Textarea } from './field';
+import { SERVER_CHANNELS } from '../utils/constants';
+import { IChat } from '../models/chat.model';
+import { SocketError } from '../utils/types';
+import { IUser } from '../models/user.model';
 
 interface FormValues {
-  description: string
-  name: string
-  users: string[]
+  description: string;
+  name: string;
+  users: string[];
 }
 
 const INIT_FORM_STATE: FormValues = {
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   users: [],
-}
+};
 
 const INIT_ERROR_STATE = {
-  description: "",
-  name: "",
-  users: "",
-}
+  description: '',
+  name: '',
+  users: '',
+};
 
 interface Props {
-  chat: IChat
+  chat: IChat;
 }
 
 export const ChatEditor = ({ chat }: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { connection, loggedUser, usersList } = useChatContext()
+  const { connection, loggedUser, usersList } = useChatContext();
   const {
     handleChange,
     errors,
@@ -53,27 +54,27 @@ export const ChatEditor = ({ chat }: Props) => {
       description: chat.description,
       name: chat.name,
       users: usersList
-        .filter((el) => chat.users.includes(el.id))
-        .map((item) => item.id.toString()),
+        .filter((el: IUser) => chat.users.includes(el.id))
+        .map((item: IUser) => item.id.toString()),
     },
-  })
+  });
 
   const handleOpen = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
   const handleReset = () => {
-    setIsOpen(false)
-    resetForm()
-  }
+    setIsOpen(false);
+    resetForm();
+  };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (connection === null) return
+    if (connection === null) return;
 
-    if (!isFormValid()) return
+    if (!isFormValid()) return;
 
     connection.emit(
-      SERVER_CHANNELS["update-chat"],
+      SERVER_CHANNELS['update-chat'],
       {
         description,
         users,
@@ -83,21 +84,21 @@ export const ChatEditor = ({ chat }: Props) => {
         uidChat: chat.uid,
       },
       ({ ok, message }: SocketError) => {
-        console.log({ ok, message })
+        console.log({ ok, message });
       }
-    )
-    handleReset()
-  }
+    );
+    handleReset();
+  };
 
   useEffect(() => {
     setForm({
       description: chat.description,
       name: chat.name,
       users: usersList
-        .filter((el) => chat.users.includes(el.id))
-        .map((item) => item.id.toString()),
-    })
-  }, [chat])
+        .filter((el: IUser) => chat.users.includes(el.id))
+        .map((item: IUser) => item.id.toString()),
+    });
+  }, [chat]);
 
   return (
     <>
@@ -123,7 +124,7 @@ export const ChatEditor = ({ chat }: Props) => {
               value={users}
               onChange={handleChange}
               label="Seleccione usuarios"
-              error={errors.users !== ""}
+              error={errors.users !== ''}
               helperText={errors.users}
               options={usersOptionsAdapter({
                 array: usersList,
@@ -135,7 +136,7 @@ export const ChatEditor = ({ chat }: Props) => {
               value={name}
               onChange={handleChange}
               label="Nombre del grupo"
-              error={errors.name !== ""}
+              error={errors.name !== ''}
               helperText={errors.name}
             />
             <Textarea
@@ -143,7 +144,7 @@ export const ChatEditor = ({ chat }: Props) => {
               value={description}
               onChange={handleChange}
               label="Descripcion"
-              error={errors.description !== ""}
+              error={errors.description !== ''}
               helperText={errors.description}
             />
           </section>
@@ -168,5 +169,5 @@ export const ChatEditor = ({ chat }: Props) => {
         </form>
       </Modal>
     </>
-  )
-}
+  );
+};
