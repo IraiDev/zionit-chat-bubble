@@ -10,6 +10,7 @@ import { useChat } from '../hooks/useChat';
 import { NotReadedMessagesProps } from '../models/chat.model';
 
 const CHAT_BUBBLE_ROOT = document.getElementById('chat-bubble-root');
+const CHAT_MODAL_ROOT = document.getElementById('chat-modal-root');
 
 interface BtnProps {
   notReadedMessages: NotReadedMessagesProps;
@@ -39,6 +40,12 @@ export const ChatBubble = ({ defaultChatName = 'Chat', hidden }: Props) => {
   if (CHAT_BUBBLE_ROOT === null) {
     throw new Error(
       'Es obligatorio crear una entrada para el portal de renderizado del chat con el nombre "chat-bubble-root"'
+    );
+  }
+
+  if (CHAT_MODAL_ROOT === null) {
+    throw new Error(
+      'Es obligatorio crear una entrada para el portal de renderizado del modal con el nombre "chat-modal-root"'
     );
   }
 

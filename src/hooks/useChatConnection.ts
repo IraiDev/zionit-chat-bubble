@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { useChatContext } from '../store/ChatStore';
 import { SERVER_CHANNELS } from '../utils/constants';
@@ -6,29 +6,25 @@ import { IUser } from '../models/user.model';
 import { SocketError } from '../utils/types';
 
 interface Props {
-  users: IUser[];
-  url: string;
+  users?: IUser[];
+  url?: string;
 }
 
-export function useChatConnection(props: Partial<Props> = {}) {
+export function useChatConnection(props: Props = {}) {
+  const { users = [], url } = props;
   const { saveConnection, clearConnection, connection } = useChatContext();
   const { loggedUser, signIn, signOut: logout } = useChatContext();
   const { loadUsers, clearUsers } = useChatContext();
-  const renderCountForUsersEqualsToZero = useRef(0);
 
-  if (props.url === undefined && connection === null) {
+  if (url === undefined) {
     throw new Error(
       'Es necesraio proveer una URL para la conexion al socket del chat'
     );
   }
 
-  if (props.users === undefined && connection === null) {
-    throw new Error('Es necesraio proveer USUARIOS para el uso del chat');
-  }
-
-  if (renderCountForUsersEqualsToZero.current >= 4) {
+  if (props.users === undefined) {
     throw new Error(
-      'debe proveer un arreglo de usuarios con al menos un usuario'
+      'Es necesraio proveer un arreglo de USUARIOS para el uso del chat'
     );
   }
 
@@ -38,8 +34,6 @@ export function useChatConnection(props: Partial<Props> = {}) {
   }, [connection, logout]);
 
   useEffect(() => {
-    if (props?.url === undefined || props?.users === undefined) return;
-
     if (loggedUser === null) {
       if (connection === null) return;
       connection.disconnect();
@@ -47,13 +41,7 @@ export function useChatConnection(props: Partial<Props> = {}) {
       return;
     }
 
-    if (connection !== null && props.users.length === 0) {
-      renderCountForUsersEqualsToZero.current += 1;
-      loadUsers(props.users);
-      return;
-    }
-
-    const socketConnection = io(props.url);
+    const socketConnection = io(url);
     socketConnection.emit(
       SERVER_CHANNELS.login,
       loggedUser.token,
@@ -62,13 +50,17 @@ export function useChatConnection(props: Partial<Props> = {}) {
       }
     );
     saveConnection(socketConnection);
-    loadUsers(props.users);
 
     return () => {
       socketConnection.disconnect();
       clearConnection();
     };
-  }, [loggedUser, props?.url, props?.users]);
+  }, [loggedUser, url]);
+
+  useEffect(() => {
+    if (users.length === 0) return;
+    loadUsers(users);
+  }, [users]);
 
   return {
     signIn,
