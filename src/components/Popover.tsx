@@ -1,21 +1,21 @@
-import React from "react"
-import { useTransition, animated } from "@react-spring/web"
+import React from 'react';
+import { useTransition, animated } from '@react-spring/web';
 
 interface Props {
-  btnComponent: React.ReactNode
-  children: React.ReactNode
-  isOpen: boolean
+  btnComponent: React.ReactNode;
+  children: React.ReactNode;
+  isOpen: boolean;
 }
 
 export const Popover = ({ btnComponent, children, isOpen }: Props) => {
   const transition = useTransition(isOpen, {
-    from: { opacity: 0, transform: "scale(0.8)" },
-    enter: { opacity: 1, transform: "scale(1)" },
-    leave: { opacity: 0, transform: "scale(0.8)" },
-  })
+    from: { opacity: 0, transform: 'scale(0.8)' },
+    enter: { opacity: 1, transform: 'scale(1)' },
+    leave: { opacity: 0, transform: 'scale(0.8)' },
+  });
 
   return (
-    <div className="fixed bottom-5 left-5 z-[50]">
+    <div className="fixed bottom-3 left-3 z-[50]">
       <>{btnComponent}</>
       {transition(
         (style, item) =>
@@ -29,5 +29,5 @@ export const Popover = ({ btnComponent, children, isOpen }: Props) => {
           )
       )}
     </div>
-  )
-}
+  );
+};

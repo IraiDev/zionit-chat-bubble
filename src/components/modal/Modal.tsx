@@ -1,10 +1,10 @@
-import React from "react"
-import { createPortal } from "react-dom"
-import { Backdrop } from "./Backdrop"
-import { ModalWrapper } from "./ModalWrapper"
-import { ModalHeader } from "./ModalHeader"
+import React from 'react';
+import { createPortal } from 'react-dom';
+import { Backdrop } from './Backdrop';
+import { ModalWrapper } from './ModalWrapper';
+import { ModalHeader } from './ModalHeader';
 
-const MODAL_ROOT = document.getElementById("modal-root")
+const MODAL_ROOT = document.getElementById('chat-modal-root');
 // const WIDTH_SIZE = {
 //   xs: "max-w-xs",
 //   sm: "max-w-sm",
@@ -21,29 +21,33 @@ const MODAL_ROOT = document.getElementById("modal-root")
 // }
 
 export interface ModalProps {
-  onClose: (value: boolean) => void
-  isOpen: boolean
-  title?: string
-  maxWidth?: string
-  hideCloseBtn?: boolean
-  children: React.ReactNode
+  onClose: (value: boolean) => void;
+  isOpen: boolean;
+  title?: string;
+  maxWidth?: string;
+  hideCloseBtn?: boolean;
+  children: React.ReactNode;
 }
 
 export function Modal({
   children,
   isOpen,
   onClose,
-  maxWidth = "w-80",
+  maxWidth = 'w-80',
   title,
   hideCloseBtn,
 }: ModalProps) {
   return createPortal(
     <Backdrop isOpen={isOpen}>
       <ModalWrapper isOpen={isOpen} maxWidth={maxWidth}>
-        <ModalHeader onClose={onClose} hideCloseBtn={hideCloseBtn} title={title} />
+        <ModalHeader
+          onClose={onClose}
+          hideCloseBtn={hideCloseBtn}
+          title={title}
+        />
         <>{children}</>
       </ModalWrapper>
     </Backdrop>,
     MODAL_ROOT!
-  )
+  );
 }

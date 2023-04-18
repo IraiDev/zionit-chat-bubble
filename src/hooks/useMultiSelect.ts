@@ -49,8 +49,8 @@ export function useMultiSelect({
 
   const handleFindInOptions = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    const notSelectedOptions = options.filter(opt =>
-      [...value, ...selectValue].includes(opt.value)
+    const notSelectedOptions = options.filter(
+      opt => !uniq([...value, ...selectValue]).includes(opt.value)
     );
     setInputValue(inputValue);
     if (findBy === 'label') {
@@ -58,6 +58,7 @@ export function useMultiSelect({
         notSelectedOptions.filter(option =>
           option.label
             .toLocaleLowerCase()
+            .trim()
             .includes(inputValue.toLocaleLowerCase().trim())
         )
       );
