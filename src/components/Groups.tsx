@@ -44,19 +44,16 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
       item && (
         <animated.div
           style={style}
-          className="absolute top-0 h-full w-[250px] border-r pt-24 pb-4
+          className="absolute top-0 h-full w-[250px] border-r pt-24 pb-4 flex flex-col
           z-10 bg-neutral-50 dark:bg-neutral-800 border-neutral-300
           dark:border-neutral-600 shadow-md"
         >
-          <header className="mb-2 px-2 flex items-center justify-between gap-2">
-            <h3 className="font-semibold text-lg">Grupos</h3>
+          <header className="flex items-center justify-between gap-2 px-2 mb-2">
+            <h3 className="text-lg font-semibold">Grupos</h3>
             {loggedUser?.cantCreateGroup && <CreateGroup />}
           </header>
-          <section>
-            <ul
-              className="divide-y divide-neutral-300 dark:divide-neutral-600 
-              max-h-[420px] sm:max-h-[520px] scroll-app"
-            >
+          <section className="flex-1 h-full scroll-app">
+            <ul className="divide-y divide-neutral-300 dark:divide-neutral-600">
               {chats.map(chat => (
                 <GroupItem
                   key={chat.id}
